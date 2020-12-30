@@ -48,6 +48,7 @@ public class EnetServerConnection : NetworkServerConnection {
     {
         byte[] data = new byte[message.Count];
         Array.Copy(message.Buffer, message.Offset, data, 0, message.Count);
+        message.Dispose();
         return SendReliable(data, 1, peer);
     }
 
@@ -55,6 +56,7 @@ public class EnetServerConnection : NetworkServerConnection {
     {
         byte[] data = new byte[message.Count];
         Array.Copy(message.Buffer, message.Offset, data, 0, message.Count);
+        message.Dispose();
         return SendUnreliable(data, 2, peer);
     }
 
