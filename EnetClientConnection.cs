@@ -68,6 +68,7 @@ class EnetClientConnection : NetworkClientConnection
         Array.Copy(message.Buffer, message.Offset,data,0, message.Count);
         bool r = SendReliable(data, 1, peer);
         client.Flush();
+        message.Dispose();
         return r;
     }
 
@@ -78,6 +79,7 @@ class EnetClientConnection : NetworkClientConnection
         Array.Copy(message.Buffer, message.Offset, data, 0, message.Count);
         bool r = SendUnreliable(data, 2, peer);
         client.Flush();
+        message.Dispose();
         return r;
     }
 
