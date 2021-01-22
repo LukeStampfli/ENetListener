@@ -99,5 +99,6 @@ public class EnetServerConnection : NetworkServerConnection {
         message.Offset = 0;
         message.Count = netEvent.Packet.Length;
         HandleMessageReceived(message, SendMode.Reliable);
+        message.Dispose();
     }
 }
