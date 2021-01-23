@@ -25,6 +25,7 @@ class EnetClientConnection : NetworkClientConnection
     private Host client;
     private Peer peer;
     private Task clientTask;
+    private bool disposedValue = false;
 
     //Whether we're connected
     public override ConnectionState ConnectionState
@@ -67,6 +68,7 @@ class EnetClientConnection : NetworkClientConnection
         Array.Copy(message.Buffer, message.Offset,data,0, message.Count);
         bool r = SendReliable(data, 1, peer);
         client.Flush();
+        message.Dispose();
         return r;
     }
 
@@ -77,17 +79,34 @@ class EnetClientConnection : NetworkClientConnection
         Array.Copy(message.Buffer, message.Offset, data, 0, message.Count);
         bool r = SendUnreliable(data, 2, peer);
         client.Flush();
+        message.Dispose();
         return r;
     }
 
     //Called when the server wants to disconnect the client
     public override bool Disconnect()
     {
-        peer.Disconnect(0);
+        peer.DisconnectNow(0);
         client.Dispose();
         return true;
     }
 
+    protected override void Dispose(bool disposing)
+    {
+        base.Dispose(disposing);
+
+        if (disposedValue)
+        {
+            return;
+        }
+
+        if (disposing)
+        {
+            Disconnect();
+        }
+
+        disposedValue = true;
+    }
 
     //We should call HandleMessageReceived(MessageBuffer message, SendMode sendMode) when we get a new message from the client
     //And HandleDisconnection(...) if the client disconnects
@@ -115,6 +134,7 @@ class EnetClientConnection : NetworkClientConnection
         message.Offset = 0;
         message.Count = netEvent.Packet.Length;
         HandleMessageReceived(message, SendMode.Reliable);
+        message.Dispose();
     }
 
     public void PerformUpdate()
