@@ -134,6 +134,7 @@ class EnetClientConnection : NetworkClientConnection
         message.Offset = 0;
         message.Count = netEvent.Packet.Length;
         HandleMessageReceived(message, SendMode.Reliable);
+        message.Dispose();
     }
 
     public void PerformUpdate()
