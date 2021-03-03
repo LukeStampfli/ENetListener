@@ -28,8 +28,6 @@ public class EnetServerConnection : NetworkServerConnection {
         this.peer = peer;
     }
 
-    private string ip;
-    private int port;
     private Peer peer;
 
 
