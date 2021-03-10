@@ -13,23 +13,23 @@ public class EnetServerConnection : NetworkServerConnection {
         get { return connectionState; }
     }
     private ConnectionState connectionState;
+    private readonly IPEndPoint[] remoteEndPoints;
 
     //A list of endpoints we're connected to on the server
     public override IEnumerable<IPEndPoint> RemoteEndPoints
     {
         get
         {
-            return new List<IPEndPoint>();
+            return remoteEndPoints;
         }
     }
 
     public EnetServerConnection(Peer peer)
     {
         this.peer = peer;
+        remoteEndPoints = new[] {new IPEndPoint(IPAddress.Parse(peer.IP), peer.Port)};
     }
 
-    private string ip;
-    private int port;
     private Peer peer;
 
 
@@ -98,7 +98,7 @@ public class EnetServerConnection : NetworkServerConnection {
         netEvent.Packet.CopyTo(message.Buffer);
         message.Offset = 0;
         message.Count = netEvent.Packet.Length;
-        HandleMessageReceived(message, SendMode.Reliable);
+        HandleMessageReceived(message, mode);
         message.Dispose();
     }
 }

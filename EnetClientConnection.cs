@@ -18,6 +18,8 @@ class EnetClientConnection : NetworkClientConnection
         Library.Initialize();
         this.ip = ip;
         this.port = port;
+
+        remoteEndPoints = new[] {new IPEndPoint(IPAddress.Parse(ip), port)};
     }
 
     private string ip;
@@ -26,6 +28,7 @@ class EnetClientConnection : NetworkClientConnection
     private Peer peer;
     private Task clientTask;
     private bool disposedValue = false;
+    private readonly IPEndPoint[] remoteEndPoints;
 
     //Whether we're connected
     public override ConnectionState ConnectionState
@@ -39,7 +42,7 @@ class EnetClientConnection : NetworkClientConnection
     {
         get
         {
-            return new List<IPEndPoint>();
+            return remoteEndPoints;
         }
     }
 

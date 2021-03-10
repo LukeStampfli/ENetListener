@@ -51,12 +51,11 @@ public class EnetListenerPlugin : NetworkListener
                     break;
 
                 case EventType.Disconnect:
-                    Console.WriteLine("Client: " + netEvent.Peer.IP + netEvent.Peer.Port + " disconnected.");
-                    connections[netEvent.Peer].OnDisconnect();
-                    connections.Remove(netEvent.Peer);
+                    HandleDisconnection(netEvent);
                     break;
 
                 case EventType.Timeout:
+                    HandleDisconnection(netEvent);
                     break;
 
                 case EventType.Receive:
@@ -77,5 +76,12 @@ public class EnetListenerPlugin : NetworkListener
 
         }
         server.Flush();
+    }
+
+    void HandleDisconnection(Event netEvent)
+    {
+        Console.WriteLine("Client: " + netEvent.Peer.IP + netEvent.Peer.Port + " disconnected.");
+        connections[netEvent.Peer].OnDisconnect();
+        connections.Remove(netEvent.Peer);
     }
 }
