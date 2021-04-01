@@ -136,7 +136,7 @@ class EnetClientConnection : NetworkClientConnection
         netEvent.Packet.CopyTo(message.Buffer);
         message.Offset = 0;
         message.Count = netEvent.Packet.Length;
-        HandleMessageReceived(message, SendMode.Reliable);
+        HandleMessageReceived(message, mode);
         message.Dispose();
     }
 
