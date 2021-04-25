@@ -84,4 +84,11 @@ public class EnetListenerPlugin : NetworkListener
         connections[netEvent.Peer].OnDisconnect();
         connections.Remove(netEvent.Peer);
     }
+
+    protected override void Dispose(bool disposing)
+    {
+        base.Dispose(disposing);
+
+        server.Dispose();
+    }
 }
